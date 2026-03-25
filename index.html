@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Fight Camp 2026</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Fight Camp">
+<link rel="apple-touch-icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #f7f7f5;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e4;
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+}
+
+.logo-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  margin-top: 2px;
+}
+
+.header-right { display: flex; align-items: center; gap: 24px; }
+
+.stat-chip { text-align: center; }
+
+.stat-num {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 28px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e4;
+}
+
+.progress-bg {
+  flex: 1;
+  height: 3px;
+  background: #ebebeb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #1a1a1a;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.progress-label { font-size: 11px; color: #aaa; white-space: nowrap; }
+
+.fight-banner {
+  background: #fffbeb;
+  border-bottom: 1px solid #fde68a;
+  padding: 8px 28px;
+  font-size: 12px;
+  color: #92660a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fight-banner strong { font-weight: 600; }
+
+.legend {
+  padding: 10px 28px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e4;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #666; }
+.leg-pip { width: 10px; height: 10px; border-radius: 3px; }
+.pip-mt     { background: #3b82f6; }
+.pip-spar   { background: #ef4444; }
+.pip-cardio { background: #22c55e; }
+.pip-rest   { background: #e5e5e5; }
+.leg-div    { width: 1px; height: 14px; background: #e5e5e5; }
+.hint       { font-size: 11px; color: #ccc; }
+
+.calendar { padding: 24px 28px 60px; }
+
+.week-block { margin-bottom: 28px; }
+
+.week-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.week-label {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.phase-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.phase-base      { color: #2563eb; border-color: #bfdbfe; background: #eff6ff; }
+.phase-intensity { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
+.phase-taper     { color: #16a34a; border-color: #bbf7d0; background: #f0fdf4; }
+.phase-fight     { color: #d97706; border-color: #fde68a; background: #fffbeb; }
+
+.week-dates { margin-left: auto; font-size: 11px; color: #bbb; }
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0,1fr));
+  gap: 8px;
+}
+
+.day-card {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: box-shadow 0.15s;
+}
+
+.day-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+.day-card.today { border-color: #1a1a1a; box-shadow: 0 0 0 1px #1a1a1a; }
+.day-card.past  { background: #fafaf9; }
+.day-card.past .day-date { color: #ccc; }
+
+.day-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3px;
+}
+
+.day-name {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #bbb;
+  font-weight: 500;
+}
+
+.day-date {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.today-pip {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  margin-top: 4px;
+}
+
+.office-tag {
+  font-size: 9px;
+  font-weight: 500;
+  color: #bbb;
+  background: #f5f5f3;
+  border: 1px solid #e8e8e4;
+  border-radius: 20px;
+  padding: 1px 5px;
+}
+
+.session-pill {
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+  transition: opacity 0.2s, transform 0.1s;
+  user-select: none;
+}
+
+.session-pill:active { transform: scale(0.97); }
+.session-pill.mt-type     { background: #eff6ff; border-color: #bfdbfe; }
+.session-pill.spar-type   { background: #fef2f2; border-color: #fecaca; }
+.session-pill.cardio-type { background: #f0fdf4; border-color: #bbf7d0; }
+.session-pill.rest-type   { background: #f9f9f7; border-color: #efefec; cursor: default; }
+.session-pill.done        { opacity: 0.38; }
+
+.pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.pill-name {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.pill-name.mt-type     { color: #1d4ed8; }
+.pill-name.spar-type   { color: #b91c1c; }
+.pill-name.cardio-type { color: #15803d; }
+.pill-name.rest-type   { color: #ccc; font-weight: 400; }
+
+.pill-time { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+.pill-icons { display: flex; align-items: center; gap: 3px; }
+
+.pill-check {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.pill-note-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #d97706;
+  flex-shrink: 0;
+}
+
+.pill-edit {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.session-pill:hover .pill-edit { display: block; }
+.pill-edit:hover { color: #1a1a1a !important; }
+
+.add-btn {
+  margin-top: auto;
+  background: none;
+  border: 1px dashed #e0e0da;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.add-btn:hover { border-color: #aaa; color: #555; }
+
+/* Modal */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.overlay.open { display: flex; }
+
+.modal {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 14px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+}
+
+.modal-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.modal-date { font-size: 12px; color: #aaa; margin-bottom: 20px; }
+
+.field { margin-bottom: 14px; }
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.field select,
+.field input,
+.field textarea {
+  width: 100%;
+  background: #f9f9f7;
+  border: 1px solid #e8e8e4;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 9px 11px;
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.field select:focus,
+.field input:focus,
+.field textarea:focus { border-color: #1a1a1a; background: #fff; }
+
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+.modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+
+.mbtn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  border: none;
+  transition: opacity 0.15s;
+}
+
+.mbtn:hover { opacity: 0.8; }
+.mbtn-primary { background: #1a1a1a; color: #fff; flex: 1; }
+.mbtn-ghost   { background: #f5f5f3; color: #555; border: 1px solid #e8e8e4; flex: 1; }
+.mbtn-danger  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+.main-tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e4;
+  padding: 0 28px;
+}
+.main-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  cursor: pointer;
+  padding: 10px 16px 9px;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.main-tab:hover { color: #555; }
+.main-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+.cardio-intro {
+  margin-bottom: 20px;
+}
+.ci-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+.ci-sub { font-size: 12px; color: #aaa; }
+
+.week-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.wtab {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e8e8e4;
+  background: #fff;
+  color: #aaa;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.wtab:hover { color: #555; border-color: #ccc; }
+.wtab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+.cardio-panel-wrap {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cp-phase-bar {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-bottom: 1px solid #e8e8e4;
+}
+.cp-block {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f3f3f1;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.cp-block:last-child { border-bottom: none; }
+.cp-tag {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  margin-top: 1px;
+  flex-shrink: 0;
+  width: 72px;
+  text-align: center;
+}
+.tag-warmup  { background: #f5f5f3; color: #888; }
+.tag-main    { background: #fef2f2; color: #b91c1c; }
+.tag-finish  { background: #fef9ec; color: #92660a; }
+.tag-cool    { background: #f0fdf4; color: #15803d; }
+.tag-rest    { background: #eff6ff; color: #1d4ed8; }
+.cp-content { flex: 1; }
+.cp-headline { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+.cp-detail   { font-size: 12px; color: #666; line-height: 1.5; }
+.cp-rounds   { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+.r-box {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.r-hard { background: #fef2f2; color: #b91c1c; }
+.r-walk { background: #f0fdf4; color: #15803d; }
+.r-label { font-size: 10px; color: #ccc; }
+.cp-total {
+  background: #f9f9f7;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  gap: 16px;
+  border-top: 1px solid #e8e8e4;
+}
+.cp-total strong { color: #1a1a1a; }
+
+.cardio-section-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+.tip-list { display: flex; flex-direction: column; gap: 10px; }
+.tip-item { display: flex; gap: 10px; font-size: 13px; color: #555; line-height: 1.5; align-items: flex-start; }
+.tip-dot-outer {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.tip-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #d97706; }
+
+
+/* Nutrition tab styles */
+.stat-block { background: #f9f9f7; border-radius: 8px; padding: 10px 12px; text-align: center; }
+.sb-num { font-family: 'Inter Tight', sans-serif; font-size: 18px; font-weight: 700; color: #1a1a1a; line-height: 1; }
+.sb-unit { font-size: 11px; color: #888; }
+.sb-label { font-size: 10px; color: #bbb; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.07em; }
+
+.n-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.n-card-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.06em; }
+.n-tag-amber { background: #fffbeb; color: #92660a; border: 1px solid #fde68a; }
+.n-tag-blue  { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.n-tag-green { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.n-tag-red   { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.n-card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 7px; }
+.n-card-body { font-size: 12px; color: #555; line-height: 1.6; }
+
+.n-meal-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+.n-meal-header { padding: 10px 14px; background: #fafaf9; border-bottom: 1px solid #e8e8e4; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.n-meal-name { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.n-meal-meta { font-size: 11px; color: #aaa; }
+.n-meal-option { padding: 9px 14px; border-bottom: 1px solid #f3f3f1; }
+.n-meal-option:last-child { border-bottom: none; }
+.n-opt-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #bbb; margin-bottom: 3px; }
+.n-opt-text { font-size: 12px; color: #555; line-height: 1.5; }
+
+.n-timing-row { padding: 12px 16px; border-bottom: 1px solid #f3f3f1; display: flex; gap: 12px; align-items: flex-start; }
+.n-timing-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.05em; }
+.ntt-amber { background: #fffbeb; color: #92660a; border: 1px solid #fde68a; }
+.ntt-green { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.ntt-blue  { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.n-timing-text { font-size: 12px; color: #555; line-height: 1.6; padding-top: 2px; }
+
+.snack-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.snack-item { display: flex; flex-direction: column; padding: 6px 0; border-bottom: 1px solid #f3f3f1; }
+.snack-item:last-child { border-bottom: none; }
+.snack-name { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+.snack-macro { font-size: 11px; color: #888; margin-top: 1px; }
+
+.shop-section { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 12px 14px; }
+.shop-sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #1a1a1a; margin-bottom: 8px; }
+.shop-row { font-size: 12px; color: #555; padding: 6px 0; border-bottom: 1px solid #f3f3f1; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.shop-row:last-child { border-bottom: none; }
+.shop-row.chk { cursor: pointer; user-select: none; transition: opacity 0.15s; }
+.shop-row.chk::before { content: ''; width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid #ddd; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
+.shop-row.chk.checked { color: #bbb; text-decoration: line-through; }
+.shop-row.chk.checked::before { background: #22c55e; border-color: #22c55e; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,5 4,7 8,3' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; }
+.shop-have { font-size: 10px; font-weight: 600; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; border-radius: 20px; padding: 1px 7px; }
+
+/* Recovery tab */
+.rec-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.rec-card-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
+.rec-sub { font-size: 12px; color: #888; margin-bottom: 2px; }
+.rec-bullet-list { display: flex; flex-direction: column; gap: 8px; }
+.rec-bullet { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #444; line-height: 1.5; }
+.rec-bullet strong { color: #1a1a1a; font-weight: 600; }
+.rec-dot { width: 7px; height: 7px; border-radius: 50%; background: #1a1a1a; flex-shrink: 0; margin-top: 5px; }
+.rec-bullet.rec-warn { color: #92660a; }
+.rec-dot-warn { width: 7px; height: 7px; border-radius: 50%; background: #d97706; flex-shrink: 0; margin-top: 5px; }
+
+@media (max-width: 680px) {
+  header, .calendar, .legend, .progress-wrap, .fight-banner, .main-tabs, #view-cardio, #view-nutrition, #view-recovery { padding-left: 14px; padding-right: 14px; }
+  .days-grid { gap: 4px; }
+  .day-card { padding: 7px 6px; min-height: 95px; }
+  .hint, .leg-div { display: none; }
+  .pill-time { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Fight Camp 2026</div>
+    <div class="logo-sub">March 23 → April 27 · 6 weeks</div>
+  </div>
+  <div class="header-right">
+    <div class="stat-chip">
+      <div class="stat-num" id="stat-done">0</div>
+      <div class="stat-label">Done</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-num" id="stat-days">—</div>
+      <div class="stat-label">Days left</div>
+    </div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">Camp progress</div>
+  <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="progress-pct">0%</div>
+</div>
+
+<div class="fight-banner">
+  <strong id="banner-text">Loading...</strong>
+  <span>· Target fight date: end of April 2026</span>
+</div>
+
+<div class="main-tabs">
+  <button class="main-tab active" onclick="switchTab('calendar')">Calendar</button>
+  <button class="main-tab" onclick="switchTab('cardio')">Cardio program</button>
+  <button class="main-tab" onclick="switchTab('nutrition')">Nutrition</button>
+  <button class="main-tab" onclick="switchTab('recovery')">Recovery</button>
+</div>
+
+<div id="view-calendar">
+
+<div class="legend">
+  <div class="leg"><div class="leg-pip pip-mt"></div>MT Pads</div>
+  <div class="leg"><div class="leg-pip pip-spar"></div>MT Sparring</div>
+  <div class="leg"><div class="leg-pip pip-cardio"></div>Cardio / HIIT</div>
+  <div class="leg"><div class="leg-pip pip-rest"></div>Rest</div>
+  <div class="leg-div"></div>
+  <div class="hint">Tap to check off · hover to edit · + to add session</div>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+</div>
+
+<div id="view-cardio" style="display:none; padding: 24px 28px 60px;">
+
+  <div class="cardio-intro">
+    <div class="ci-title">Sunday morning — fight cardio session</div>
+    <div class="ci-sub">1 session per week · ~55 min · your park · no equipment needed</div>
+  </div>
+
+  <div class="week-tabs">
+    <button class="wtab active" onclick="switchWeek(1,this)">Wk 1</button>
+    <button class="wtab" onclick="switchWeek(2,this)">Wk 2</button>
+    <button class="wtab" onclick="switchWeek(3,this)">Wk 3</button>
+    <button class="wtab" onclick="switchWeek(4,this)">Wk 4</button>
+    <button class="wtab" onclick="switchWeek(5,this)">Wk 5</button>
+    <button class="wtab" onclick="switchWeek(6,this)">Wk 6</button>
+  </div>
+
+  <div id="cardio-panel"></div>
+
+  <div class="cardio-section-title" style="margin-top:32px;">Park tips — making it fight-specific</div>
+  <div class="tip-list">
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>Use a phone interval timer app (Seconds, Interval Timer) set to your work/rest times. Chase the clock, not distance.</span></div>
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>Your lap (~340m, ~2 min at tempo) is your round marker. Stop counting km — count effort intervals.</span></div>
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>The twists and turns force lateral deceleration and re-acceleration — more sport-specific than a flat oval.</span></div>
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>On sprint efforts, pick a landmark (bench, tree, corner) and go all-out to it. Distance doesn't matter — full effort for ~15–20 sec matters.</span></div>
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>Rate each hard session out of 10. Aim for 8/10 on your hard rounds. Consistently 6/10 = too easy. 10/10 = went too hard.</span></div>
+    <div class="tip-item"><div class="tip-dot-outer"><div class="tip-dot-inner"></div></div><span>Optional: shadow box during walk rest intervals. Keeps hands active and bridges running cardio to fight movement.</span></div>
+  </div>
+
+</div>
+
+<div id="view-nutrition" style="display:none; padding: 24px 28px 60px;">
+
+  <div class="cardio-intro">
+    <div class="ci-title">Nutrition plan</div>
+    <div class="ci-sub">High protein · low sugar · fight-weight cut · ~2000 kcal training days · ~1700 kcal rest days</div>
+  </div>
+
+  <div class="week-tabs" id="nutr-tabs">
+    <button class="wtab active" onclick="showNutr('targets',this)">Daily targets</button>
+    <button class="wtab" onclick="showNutr('supplements',this)">Supplements</button>
+    <button class="wtab" onclick="showNutr('meals',this)">Meal options</button>
+    <button class="wtab" onclick="showNutr('timing',this)">Meal timing</button>
+    <button class="wtab" onclick="showNutr('snacks',this)">Snacks</button>
+    <button class="wtab" onclick="showNutr('shopping',this)">Shopping list</button>
+  </div>
+
+  <div id="nutr-panel-targets">
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px;">
+      <div class="stat-block"><div class="sb-num">~2000</div><div class="sb-unit">kcal</div><div class="sb-label">Training days</div></div>
+      <div class="stat-block"><div class="sb-num">~1700</div><div class="sb-unit">kcal</div><div class="sb-label">Rest days</div></div>
+      <div class="stat-block"><div class="sb-num">180–200g</div><div class="sb-unit">protein</div><div class="sb-label">Every day</div></div>
+      <div class="stat-block"><div class="sb-num">~0.5kg</div><div class="sb-unit">per week</div><div class="sb-label">Target cut</div></div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-amber">Weight cut logic</div>
+      <div class="n-card-title">How you drop 3–5 kg over 6 weeks</div>
+      <div class="n-card-body">At 71kg with your training load you burn roughly 2400–2600 kcal/day to maintain weight. Eating ~2000 on training days and ~1700 on rest days creates a daily deficit of 400–900 kcal. Combined with 5 weekly sessions you should lose 0.5–0.75 kg per week — arriving at 66–68 kg by fight week without losing muscle. Do not go below 1600 kcal on any day. Below that you start burning muscle and your training quality collapses.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-blue">Protein target</div>
+      <div class="n-card-title">Why 180–200g protein every day</div>
+      <div class="n-card-body">In a caloric deficit with heavy training you need ~2.2–2.5g protein per kg bodyweight to preserve muscle. At 71kg that's 156–178g minimum — so 180–200g gives you a buffer. Your snacks alone cover ~80–100g if you hit cottage cheese, Greek yogurt, a tuna packet, and jerky daily. Meals need to deliver the other ~100g. Protein powder and creatine stack on top to make this easy to hit.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-green">Training vs rest days</div>
+      <div class="n-card-title">How to eat differently on each</div>
+      <div class="n-card-body"><strong>Training days (Mon, Wed, Fri, Sat, Sun):</strong> ~2000 kcal. Include brown rice at lunch and optionally dinner on sparring days. Don't undereat — your MT quality tanks if you're running on empty.<br><br><strong>Rest days (Tue, Thu):</strong> ~1700 kcal. Same protein, cut carbs — little or no brown rice. Fill volume with extra veg, eggs, and lean protein. Hunger on rest days is usually thirst — drink water first.</div>
+    </div>
+  </div>
+
+  <div id="nutr-panel-supplements" style="display:none;">
+    <div class="n-card">
+      <div class="n-card-tag n-tag-blue">Daily — every single day</div>
+      <div class="n-card-title">Protein powder</div>
+      <div class="n-card-body">1–2 scoops per day (~25–50g protein). The most important use case for you is <strong>post-training on late nights</strong> — when you get home at 10pm from an 8pm session and don't want to cook, a shake takes 30 seconds and gets 25g protein into your muscles immediately. Also useful as a breakfast add-in or mid-afternoon snack when you're short on time. Don't use it to replace real meals — use it to fill gaps.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-green">Daily — every single day</div>
+      <div class="n-card-title">Creatine monohydrate</div>
+      <div class="n-card-body">3–5g per day, taken at any consistent time — timing doesn't matter much, consistency does. Creatine's benefits are cumulative: it takes 2–3 weeks of daily use to saturate your muscles. It supports explosive power output, helps you recover faster between hard efforts (like rounds), and has zero downsides at this dosage. Take it with your protein shake or stir it into water. Don't cycle it — just take it every day throughout camp and beyond.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-amber">Training sessions only</div>
+      <div class="n-card-title">Electrolyte drink</div>
+      <div class="n-card-body">You already have this — good. Use it during and after every MT session and cardio session. When you're cutting weight and training hard you lose significant sodium, potassium, and magnesium through sweat. Plain water doesn't replace these. Symptoms of electrolyte depletion — cramping, fatigue, brain fog, poor sleep — are easily mistaken for overtraining. Zero-cal electrolytes are ideal since you're cutting.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-amber">Optional but useful</div>
+      <div class="n-card-title">Magnesium glycinate — before bed</div>
+      <div class="n-card-body">200–400mg before sleep. Magnesium is depleted rapidly by heavy training and is directly linked to sleep quality and muscle recovery — two things you've said are critical for you. Glycinate form is the gentlest on the stomach. This is inexpensive, widely available, and one of the most evidence-backed supplements for athletes in hard training. Worth considering if you notice poor sleep quality mid-camp.</div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-green">Optional</div>
+      <div class="n-card-title">Vitamin D3 + Omega-3</div>
+      <div class="n-card-body">Both support recovery and reduce inflammation. If you're already getting sun exposure (Mexico City) you may not need D3. Omega-3 (fish oil, 1–2g EPA/DHA per day) helps with joint recovery and reduces soreness — useful if your body feels beat up in weeks 3–4. Neither are essential but both are low-cost and well-supported.</div>
+    </div>
+    <div class="n-card" style="border-left: 3px solid #fecaca;">
+      <div class="n-card-tag n-tag-red">What NOT to take</div>
+      <div class="n-card-title">Avoid pre-workouts and stimulant stacks</div>
+      <div class="n-card-body">Pre-workout supplements with high caffeine, beta-alanine, or proprietary blends mask fatigue rather than addressing it — and they wreck your sleep when used before evening sessions. If you need extra energy for an 8pm session, a black coffee 45 min before is cleaner and won't interfere with sleep as badly as a pre-workout at that hour. Your sleep is your biggest recovery asset — protect it.</div>
+    </div>
+  </div>
+
+  <div id="nutr-panel-meals" style="display:none;">
+    <div class="n-meal-card">
+      <div class="n-meal-header">
+        <span class="n-meal-name">Breakfast</span>
+        <span class="n-meal-meta">~10am · tea or coffee · keep caffeine to before lunch</span>
+      </div>
+      <div class="n-meal-option"><div class="n-opt-label">Standard — keep doing this</div><div class="n-opt-text">Chobani yogurt cup + granola · banana or granola bar as alternative · tea or coffee · this is your habit, don't change it</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Easy upgrade — swap granola for nuts</div><div class="n-opt-text">Chobani yogurt cup + small handful of mixed nuts (almonds, cashews, walnuts) · same effort, more protein and healthy fat, less sugar than granola · do this when you have nuts in the house</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Best upgrade — add a hard boiled egg</div><div class="n-opt-text">Chobani yogurt cup + granola or nuts + 1–2 hard boiled eggs on the side · adds ~12g protein for near zero effort if you batch-boil eggs on Sunday · highest protein version of your existing breakfast</div></div>
+    </div>
+    <div class="n-meal-card">
+      <div class="n-meal-header">
+        <span class="n-meal-name">Lunch</span>
+        <span class="n-meal-meta">~2pm · ~50g protein · ~500 kcal · main meal of the day · on 8pm training days, eat slightly more than usual here</span>
+      </div>
+      <div class="n-meal-option"><div class="n-opt-label">Option A — stir fry bowl</div><div class="n-opt-text">150g chicken breast or thigh (pan-fried, diced) · mixed veg (broccoli, bell pepper, zucchini, bok choy) · 80g dry brown rice · soy sauce, garlic, ginger, sesame oil</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option B — ground beef bowl</div><div class="n-opt-text">150g lean ground beef (pan) · sautéed spinach, mushrooms, onion · 70g brown rice · hot sauce or salsa · squeeze of lime</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option C — tuna or shrimp bowl</div><div class="n-opt-text">2 tuna packets or 150g cooked shrimp · cucumber, tomato, avocado · 60g brown rice (skip on rest days) · olive oil + lemon dressing</div></div>
+    </div>
+    <div class="n-meal-card">
+      <div class="n-meal-header">
+        <span class="n-meal-name">Pre-training snack</span>
+        <span class="n-meal-meta">~5:30–6pm on 8pm training days only · light, fast-digesting · not a meal</span>
+      </div>
+      <div class="n-meal-option"><div class="n-opt-label">Option A</div><div class="n-opt-text">Banana + Greek yogurt · easy carbs + protein · sits well before training</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option B</div><div class="n-opt-text">Tuna packet + a few rice cakes · protein + fast carb · 5 min prep, zero cooking</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option C</div><div class="n-opt-text">Protein shake + piece of fruit · fastest option · good if you're short on time before heading out</div></div>
+    </div>
+    <div class="n-meal-card">
+      <div class="n-meal-header">
+        <span class="n-meal-name">Post-training snack</span>
+        <span class="n-meal-meta">~10–10:30pm on 8pm training days · this is your last meal of the day · ~40–50g protein · ~300–400 kcal · no rice</span>
+      </div>
+      <div class="n-meal-option"><div class="n-opt-label">Option A — quickest (barely any cooking)</div><div class="n-opt-text">Protein shake (1 scoop) + 150g cottage cheese + cucumber or a handful of nuts · covers fast post-training protein AND slow overnight casein in one sitting · done in 2 min</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option B — light cooking, more filling</div><div class="n-opt-text">Egg scramble (4 eggs + spinach + sliced turkey, 8 min) + 150g cottage cheese after · best of both worlds — immediate protein from eggs, overnight repair from cottage cheese</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option C — no cooking at all</div><div class="n-opt-text">Tuna packet + cottage cheese (150g) + cucumber · zero prep · eat within 20 min of getting home, then wind down · don't skip this thinking you're saving calories — overnight muscle breakdown is worse</div></div>
+    </div>
+    <div class="n-meal-card">
+      <div class="n-meal-header">
+        <span class="n-meal-name">Dinner (non 8pm training days)</span>
+        <span class="n-meal-meta">~7–8pm on Mon 4:30pm, Fri 6pm, Sat, Sun, and rest days · ~50g protein · ~500 kcal</span>
+      </div>
+      <div class="n-meal-option"><div class="n-opt-label">Option A — salmon + veg</div><div class="n-opt-text">180g salmon fillet (pan-seared 4 min each side) · steamed broccoli + asparagus · small portion brown rice if it was a training day · lemon + herbs</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option B — chicken thighs</div><div class="n-opt-text">200g boneless chicken thighs (pan, 6 min each side) · large mixed salad · olive oil dressing · half avocado</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">Option C — ground beef + veg</div><div class="n-opt-text">150g lean ground beef · sautéed mushrooms, spinach, onion · skip rice on rest days · hot sauce or salsa</div></div>
+      <div class="n-meal-option"><div class="n-opt-label">After dinner — every night</div><div class="n-opt-text">150g cottage cheese before bed · even on non-training days · this is your overnight muscle repair — keep it as a daily non-negotiable</div></div>
+    </div>
+  </div>
+
+  <div id="nutr-panel-timing" style="display:none;">
+    <div class="n-card" style="padding:0;overflow:hidden;">
+      <div class="n-timing-row">
+        <div class="n-timing-tag ntt-amber">10am — Breakfast</div>
+        <div class="n-timing-text">Chobani yogurt + granola (or swap granola for nuts, or add a hard boiled egg on the side). Tea or coffee. Stop caffeine after this — no caffeine past lunch to protect your sleep.</div>
+      </div>
+      <div class="n-timing-row">
+        <div class="n-timing-tag ntt-amber">2pm — Lunch</div>
+        <div class="n-timing-text">Your main meal of the day. High protein + brown rice + veg. On 8pm training days eat slightly more than usual here — this is your primary fuel tank for the evening session. Creatine can go in a drink at this meal.</div>
+      </div>
+      <div class="n-timing-row">
+        <div class="n-timing-tag ntt-blue">5:30–6pm — Pre-training snack (8pm days only)</div>
+        <div class="n-timing-text">Light snack — banana + yogurt, tuna + rice cakes, or a protein shake + fruit. Not a meal. Tops you up without weighing you down going into training.</div>
+      </div>
+      <div class="n-timing-row">
+        <div class="n-timing-tag ntt-green">~10–10:30pm — Post-training + last meal (8pm days)</div>
+        <div class="n-timing-text">This is your final meal of the day — combines post-training recovery and overnight repair in one sitting. Protein shake + cottage cheese is the fastest option. Egg scramble + cottage cheese if you want something more substantial. Always include cottage cheese here — it's your slow overnight protein. No rice. Be done eating by 11pm to give yourself time to wind down before sleep.</div>
+      </div>
+      <div class="n-timing-row">
+        <div class="n-timing-tag ntt-green">7–8pm — Dinner + cottage cheese (non 8pm days)</div>
+        <div class="n-timing-text">Proper dinner — salmon, chicken, or ground beef with veg. Small portion of brown rice if you trained that day. Follow it with 150g cottage cheese before bed. Same rule applies: cottage cheese every night, no exceptions.</div>
+      </div>
+      <div class="n-timing-row" style="border-bottom:none;">
+        <div class="n-timing-tag ntt-amber">Rest days (Tue + Thu)</div>
+        <div class="n-timing-text">Breakfast at 10am, lunch at 2pm, dinner at 7–8pm + cottage cheese. No pre-training snack needed. Cut brown rice portions or skip entirely. Same protein targets. If you feel hungry in the afternoon, reach for a snack from your list — tuna, hard boiled eggs, edamame — not extra carbs.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nutr-panel-snacks" style="display:none;">
+    <div class="n-card">
+      <div class="n-card-tag n-tag-green">Your current list — keep all of these</div>
+      <div class="n-card-title">Snacks you already have</div>
+      <div class="n-card-body">
+        <div class="snack-grid">
+          <div class="snack-item"><span class="snack-name">Cottage cheese</span><span class="snack-macro">~14g protein / 100g · casein · your nightly last-meal staple on all days</span></div>
+          <div class="snack-item"><span class="snack-name">Greek yogurt</span><span class="snack-macro">~10g protein / 100g · keep it plain, no flavoured</span></div>
+          <div class="snack-item"><span class="snack-name">Beef jerky</span><span class="snack-macro">~30g protein / 100g · watch sodium, fine in moderation</span></div>
+          <div class="snack-item"><span class="snack-name">Tuna packets</span><span class="snack-macro">~25g protein / packet · one of your best snacks</span></div>
+          <div class="snack-item"><span class="snack-name">Boiled shrimp</span><span class="snack-macro">~20g protein / 100g · very low calorie</span></div>
+          <div class="snack-item"><span class="snack-name">Sliced turkey</span><span class="snack-macro">~20g protein / 100g · easy grab snack</span></div>
+          <div class="snack-item"><span class="snack-name">Fruit</span><span class="snack-macro">Max 2 pieces/day · berries are best (low sugar)</span></div>
+          <div class="snack-item"><span class="snack-name">Zero cal drinks</span><span class="snack-macro">All good · stay hydrated throughout the day</span></div>
+          <div class="snack-item"><span class="snack-name">Electrolyte drinks</span><span class="snack-macro">Training sessions only · zero cal versions ideal</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="n-card-tag n-tag-blue">Add these to your rotation</div>
+      <div class="n-card-title">Recommended additions</div>
+      <div class="n-card-body">
+        <div class="snack-grid">
+          <div class="snack-item"><span class="snack-name">Hard boiled eggs</span><span class="snack-macro">6g protein each · batch cook 6–8 on Sunday · cheapest protein snack you can make</span></div>
+          <div class="snack-item"><span class="snack-name">Edamame (frozen, salted)</span><span class="snack-macro">~11g protein / 100g · fills the "want to eat something" craving without sugar</span></div>
+          <div class="snack-item"><span class="snack-name">Rice cakes + almond butter</span><span class="snack-macro">Controlled carb hit for heavy training days · no added sugar almond butter only</span></div>
+          <div class="snack-item"><span class="snack-name">Cucumber, celery, carrots + hummus</span><span class="snack-macro">Volume eating · fills stomach when hungry but not protein-depleted</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="n-card" style="border-left: 3px solid #fecaca;">
+      <div class="n-card-tag n-tag-red">Watch out for</div>
+      <div class="n-card-title">Easy traps on this diet</div>
+      <div class="n-card-body">
+        <div class="snack-grid">
+          <div class="snack-item"><span class="snack-name">Too much fruit</span><span class="snack-macro">Natural sugar still adds up — cap at 2 pieces/day. Berries are lowest sugar.</span></div>
+          <div class="snack-item"><span class="snack-name">Flavoured yogurts</span><span class="snack-macro">Most have significant added sugar — plain only and add berries yourself</span></div>
+          <div class="snack-item"><span class="snack-name">Nut butters with added sugar</span><span class="snack-macro">Read labels — many popular brands add sugar or palm oil. Ingredient list should be: nuts, salt.</span></div>
+          <div class="snack-item"><span class="snack-name">Undereating on rest days</span><span class="snack-macro">1700 kcal still needs to be hit. Dropping to 1200 feels like discipline but costs muscle.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nutr-panel-shopping" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-size:12px;color:#888;">Tap any item to check it off</div>
+      <button onclick="clearShopList()" style="font-size:11px;color:#aaa;background:none;border:1px solid #e8e8e4;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:'Inter',sans-serif;">Clear all</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="shop-grid">
+      <div class="shop-section">
+        <div class="shop-sec-title">Proteins</div>
+        <div class="shop-row chk" data-id="s1">Cottage cheese</div>
+        <div class="shop-row chk" data-id="s2">Greek yogurt / Chobani</div>
+        <div class="shop-row chk" data-id="s3">Beef jerky</div>
+        <div class="shop-row chk" data-id="s4">Tuna packets</div>
+        <div class="shop-row chk" data-id="s5">Boiled shrimp</div>
+        <div class="shop-row chk" data-id="s6">Sliced turkey</div>
+        <div class="shop-row chk" data-id="s7">Protein powder</div>
+        <div class="shop-row chk" data-id="s8">Chicken breast / thighs</div>
+        <div class="shop-row chk" data-id="s9">Lean ground beef (90%+)</div>
+        <div class="shop-row chk" data-id="s10">Salmon fillets</div>
+        <div class="shop-row chk" data-id="s11">Eggs (2 dozen/week)</div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-sec-title">Vegetables</div>
+        <div class="shop-row chk" data-id="v1">Broccoli (fresh or frozen)</div>
+        <div class="shop-row chk" data-id="v2">Baby spinach</div>
+        <div class="shop-row chk" data-id="v3">Bell peppers</div>
+        <div class="shop-row chk" data-id="v4">Zucchini</div>
+        <div class="shop-row chk" data-id="v5">Mushrooms</div>
+        <div class="shop-row chk" data-id="v6">Cucumber</div>
+        <div class="shop-row chk" data-id="v7">Cherry tomatoes</div>
+        <div class="shop-row chk" data-id="v8">Asparagus</div>
+        <div class="shop-row chk" data-id="v9">Bok choy / cabbage</div>
+        <div class="shop-row chk" data-id="v10">Edamame (frozen, salted)</div>
+        <div class="shop-row chk" data-id="v11">Celery + carrots</div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-sec-title">Carbs (controlled)</div>
+        <div class="shop-row chk" data-id="c1">Brown rice</div>
+        <div class="shop-row chk" data-id="c2">Granola (for breakfast)</div>
+        <div class="shop-row chk" data-id="c3">Rice cakes (plain)</div>
+        <div class="shop-row chk" data-id="c4">Berries (fresh or frozen)</div>
+        <div class="shop-row chk" data-id="c5">Bananas</div>
+        <div class="shop-row chk" data-id="c6">Granola bars (backup breakfast)</div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-sec-title">Fats + flavour + supplements</div>
+        <div class="shop-row chk" data-id="f1">Creatine</div>
+        <div class="shop-row chk" data-id="f2">Electrolyte drinks (zero cal)</div>
+        <div class="shop-row chk" data-id="f3">Olive oil</div>
+        <div class="shop-row chk" data-id="f4">Sesame oil (small bottle)</div>
+        <div class="shop-row chk" data-id="f5">Avocados</div>
+        <div class="shop-row chk" data-id="f6">Almond butter (no added sugar)</div>
+        <div class="shop-row chk" data-id="f7">Mixed nuts</div>
+        <div class="shop-row chk" data-id="f8">Hummus</div>
+        <div class="shop-row chk" data-id="f9">Garlic + ginger</div>
+        <div class="shop-row chk" data-id="f10">Soy sauce / tamari</div>
+        <div class="shop-row chk" data-id="f11">Hot sauce / salsa</div>
+        <div class="shop-row chk" data-id="f12">Lemons / limes</div>
+        <div class="shop-row chk" data-id="f13">Magnesium glycinate (optional)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="view-recovery" style="display:none; padding: 24px 28px 60px;">
+
+  <div class="cardio-intro">
+    <div class="ci-title">Recovery protocol</div>
+    <div class="ci-sub">What you do between sessions is what determines how good your next session is</div>
+  </div>
+
+  <div class="week-tabs" id="rec-tabs">
+    <button class="wtab active" onclick="showRec('sleep',this)">Sleep</button>
+    <button class="wtab" onclick="showRec('postspar',this)">Post-sparring</button>
+    <button class="wtab" onclick="showRec('restdays',this)">Rest days</button>
+    <button class="wtab" onclick="showRec('fatigue',this)">Fatigue signals</button>
+    <button class="wtab" onclick="showRec('daily',this)">Daily habits</button>
+  </div>
+
+  <div id="rec-panel-sleep">
+    <div class="rec-card">
+      <div class="rec-card-title">Sleep — your #1 recovery tool</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Target 8–9 hours every night. Non-negotiable. No supplement or habit replaces this.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Keep the same sleep and wake times 7 days a week — even weekends. Consistency matters more than duration.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>No screens 30–45 min before bed. After hard training your nervous system is fired up — it needs a wind-down signal.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Room temperature 17–19°C. Training raises your core temp — a cool room accelerates the drop your body needs for deep sleep.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Dark and quiet. Blackout curtains or an eye mask if needed.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>400mg magnesium glycinate 1 hour before bed on hard training days — directly supports sleep depth and muscle recovery.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>On 8pm training nights: eat your post-training snack immediately when you get home, then start winding down. Be in bed by midnight at the latest.</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>No caffeine after lunch. Coffee or tea at 3pm will still be in your system at 11pm.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rec-panel-postspar" style="display:none;">
+    <div class="rec-card">
+      <div class="rec-card-title">Immediately after sparring (Wed + Sat)</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Electrolytes first — before you even get changed. You've been sweating hard for 90 min.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Eat your post-training snack within 30 min of finishing. Don't skip because you're tired.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>5–10 min of light stretching before bed — hips, neck, shoulders, lower back. Sparring compresses the spine and tightens hips. Two minutes per area is enough.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Finish your shower with 60 seconds of cold water. Reduces acute inflammation and shifts your nervous system from fight mode to rest mode faster.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>No alcohol. Even one drink after sparring significantly impairs the overnight muscle repair process.</span></div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-card-title">The day after sparring (Thu after Wed, Sun after Sat)</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Thursday is a full rest day — no training. This is by design. Let the soreness clear.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>A 20-min easy walk is ideal — not a run, just a walk. Keeps blood flowing and clears metabolic waste without adding stress.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Eat your full protein targets even though you're resting. Your muscles are actively repairing — they need fuel.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>10 min of hip and lower body stretching in the afternoon — by the time Friday's MT session comes, you want to feel loose.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Sunday after Saturday sparring: cardio is scheduled — but keep Sunday's session honest, not brutal. You're on fatigued legs by design.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rec-panel-restdays" style="display:none;">
+    <div class="rec-card">
+      <div class="rec-card-title">Tuesday + Thursday — how to actually rest</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Rest day ≠ do nothing all day. Total inactivity slows recovery. Light movement (walking, stretching) speeds it up.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>A 20-min walk after lunch is one of the highest-return habits in this whole plan. Aids digestion, activates your lymphatic system, clears waste from training.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Hit your protein targets — 180–200g. Don't under-eat on rest days thinking you're saving calories. Muscle repairs fastest when protein is available.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Cut carbs on rest days — no or minimal brown rice. Fill the volume with extra veg and protein instead.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Use rest days for social life, decompression, and sleep catch-up. They're a feature of the plan, not a weakness.</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Don't add extra training on rest days because you "feel fine." Fatigue accumulates invisibly — you won't feel it until it peaks at the wrong time.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rec-panel-fatigue" style="display:none;">
+    <div class="rec-card">
+      <div class="rec-card-title">Warning signs — when to pull back</div>
+      <div class="rec-sub">Weeks 3–4 are your peak load weeks. Some tiredness is normal and productive. These signs mean you've crossed into overreaching:</div>
+      <div class="rec-bullet-list" style="margin-top:12px;">
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Soreness that doesn't clear between sessions — still sore on Friday from Wednesday sparring</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Poor sleep despite being exhausted — you're tired but can't switch off</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Declining performance in sparring — you feel slower, not sharper, week over week</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Persistent low mood or irritability — especially if it's not like you</span></div>
+        <div class="rec-bullet rec-warn"><div class="rec-dot-warn"></div><span>Loss of appetite or strong food aversion</span></div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-card-title">What to do if you notice 2+ of the above</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Drop one MT session that week — skip Friday or one sparring day, not both.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Skip the Sunday cardio session that week entirely.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Prioritise sleep above everything else for 2–3 days.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>Eat at maintenance — don't cut calories during a recovery week.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span>One unplanned recovery week mid-camp will not hurt your fitness. Pushing through overreaching into the fight week will.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rec-panel-daily" style="display:none;">
+    <div class="rec-card">
+      <div class="rec-card-title">Daily habits — small things that compound</div>
+      <div class="rec-bullet-list">
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Walk after lunch (every day).</strong> 20 min. Improves digestion, reduces blood sugar spike, keeps lymphatic system active. Especially important on office days.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Hydration.</strong> Aim for 3L of water per day minimum on training days. Dehydration by even 2% impairs power output and decision-making in sparring.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Electrolytes during every training session.</strong> Not just water — you're sweating out sodium, potassium, magnesium. Cramping and brain fog mid-session are electrolyte issues, not fitness issues.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Creatine daily.</strong> Takes 2–3 weeks to fully saturate. Supports recovery between rounds and explosive output. Miss a day and take it the next — just stay consistent.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>5 min of stretching before sleep.</strong> Hips, hip flexors, neck, shoulders. Every night. It takes less time than scrolling your phone and does more for next-day soreness than anything else.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Cold finish to showers on hard training days.</strong> 60 seconds cold at the end. Reduces inflammation, improves mood, helps nervous system shift to rest mode.</span></div>
+        <div class="rec-bullet"><div class="rec-dot"></div><span><strong>Protein within 30 min of finishing every training session.</strong> Even if it's just a shake. The window is real — don't miss it consistently.</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Session</div>
+    <div class="modal-date" id="modal-date"></div>
+    <div class="field">
+      <label>Type</label>
+      <select id="m-type">
+        <option value="mt-type">MT Pads / Technique</option>
+        <option value="spar-type">MT Sparring</option>
+        <option value="cardio-type">Cardio / HIIT</option>
+        <option value="rest-type">Rest / Recovery</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Time</label>
+      <input type="text" id="m-time" placeholder="e.g. 8pm, 6pm, Morning">
+    </div>
+    <div class="field">
+      <label>Notes</label>
+      <textarea id="m-notes" placeholder="How did it go? Rounds, intensity, things to work on, how you felt..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="mbtn mbtn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="mbtn mbtn-danger" id="del-btn" onclick="deleteSession()">Delete</button>
+      <button class="mbtn mbtn-primary" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'fightcamp_v2';
+const CAMP_START  = new Date(2026, 2, 23);
+const FIGHT_DATE  = new Date(2026, 3, 27);
+const DAY_NAMES   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const PHASES = [
+  { label:'Base',       cls:'base' },
+  { label:'Build',      cls:'base' },
+  { label:'Intensity',  cls:'intensity' },
+  { label:'Peak',       cls:'intensity' },
+  { label:'Taper',      cls:'taper' },
+  { label:'Fight Week', cls:'fight' },
+];
+
+const NAME_MAP = {
+  'mt-type':     'MT Pads',
+  'spar-type':   'MT Sparring',
+  'cardio-type': 'Cardio / HIIT',
+  'rest-type':   'Rest',
+};
+
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function dk(d) { return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
+
+function defaultSessions(dateObj, weekIdx) {
+  const dow = dateObj.getDay();
+  const w   = weekIdx + 1;
+  if (dow === 1) return [{ type:'mt-type',     name:'MT Pads',       time:'8pm',     note:'' }];
+  if (dow === 2) return [{ type:'rest-type',    name:'Rest',          time:'',        note:'' }];
+  if (dow === 3) return [{ type:'spar-type',    name:'MT Sparring',   time:'8pm',     note:'' }];
+  if (dow === 4) return [{ type:'rest-type',    name:'Recovery',      time:'',        note:'' }];
+  if (dow === 5) return [{ type:'mt-type',      name:'MT Pads',       time:'6pm',     note:'' }];
+  if (dow === 6) return [{ type:'spar-type',    name:'MT Sparring',   time:'12pm',    note:'' }];
+  if (dow === 0) {
+    if (w === 6) return [{ type:'rest-type',    name:'Rest',          time:'',        note:'' }];
+    return             [{ type:'cardio-type',   name:'Cardio / HIIT', time:'Morning', note:'' }];
+  }
+  return [];
+}
+
+let state = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { return {}; } })();
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {} }
+
+function getDay(dateObj, weekIdx) {
+  const key = dk(dateObj);
+  if (!state[key]) state[key] = { sessions: defaultSessions(dateObj, weekIdx), done: {} };
+  return state[key];
+}
+
+let modalCtx = null;
+
+function render() {
+  const cal = document.getElementById('calendar');
+  cal.innerHTML = '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  let totalS = 0, doneS = 0;
+
+  for (let w = 0; w < 6; w++) {
+    const wStart = addDays(CAMP_START, w*7);
+    const wEnd   = addDays(wStart, 6);
+    const phase  = PHASES[w];
+
+    const block = document.createElement('div');
+    block.className = 'week-block';
+    block.innerHTML = `
+      <div class="week-header">
+        <div class="week-label">Week ${w+1}</div>
+        <div class="phase-badge phase-${phase.cls}">${phase.label}</div>
+        <div class="week-dates">${MONTH_NAMES[wStart.getMonth()]} ${wStart.getDate()} – ${MONTH_NAMES[wEnd.getMonth()]} ${wEnd.getDate()}</div>
+      </div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'days-grid';
+
+    for (let d = 0; d < 7; d++) {
+      const date = addDays(wStart, d);
+      date.setHours(0,0,0,0);
+      const key  = dk(date);
+      const dow  = date.getDay();
+      const data = getDay(date, w);
+      const isToday   = date.getTime() === today.getTime();
+      const isPast    = date < today;
+      const officeDay = dow >= 1 && dow <= 3;
+
+      const card = document.createElement('div');
+      card.className = 'day-card' + (isToday ? ' today' : '') + (isPast && !isToday ? ' past' : '');
+
+      card.innerHTML = `
+        <div class="day-top">
+          <div>
+            <div class="day-name">${DAY_NAMES[dow]}</div>
+            <div class="day-date">${date.getDate()}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+            ${isToday ? '<div class="today-pip"></div>' : ''}
+            ${officeDay ? '<div class="office-tag">office</div>' : ''}
+          </div>
+        </div>`;
+
+      data.sessions.forEach((sess, si) => {
+        const isDone = !!data.done[si];
+        if (sess.type !== 'rest-type') { totalS++; if (isDone) doneS++; }
+
+        const pill = document.createElement('div');
+        pill.className = `session-pill ${sess.type}${isDone ? ' done' : ''}`;
+        pill.innerHTML = `
+          <div class="pill-row">
+            <span class="pill-name ${sess.type}">${sess.name}</span>
+            <div class="pill-icons">
+              ${sess.note ? '<div class="pill-note-dot" title="Has notes"></div>' : ''}
+              ${isDone ? `<div class="pill-check"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1.5,4 3,5.5 6.5,2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` : ''}
+              ${sess.type !== 'rest-type' ? `<button class="pill-edit" title="Edit">✎</button>` : ''}
+            </div>
+          </div>
+          ${sess.time ? `<div class="pill-time">${sess.time}</div>` : ''}
+        `;
+
+        if (sess.type !== 'rest-type') {
+          pill.addEventListener('click', (e) => {
+            if (e.target.closest('.pill-edit')) return;
+            data.done[si] = !data.done[si];
+            save(); render();
+          });
+        }
+
+        const editBtn = pill.querySelector('.pill-edit');
+        if (editBtn) editBtn.addEventListener('click', (e) => { e.stopPropagation(); openModal(key, si, false, date); });
+
+        card.appendChild(pill);
+      });
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-btn';
+      addBtn.textContent = '+ add session';
+      addBtn.addEventListener('click', () => openModal(key, null, true, date));
+      card.appendChild(addBtn);
+
+      grid.appendChild(card);
+    }
+
+    block.appendChild(grid);
+    cal.appendChild(block);
+  }
+
+  document.getElementById('stat-done').textContent  = doneS;
+  document.getElementById('stat-total').textContent = totalS;
+
+  const todayNow = new Date(); todayNow.setHours(0,0,0,0);
+  const daysLeft = Math.max(0, Math.ceil((FIGHT_DATE - todayNow) / 86400000));
+  document.getElementById('stat-days').textContent = daysLeft;
+  document.getElementById('banner-text').textContent = daysLeft > 0
+    ? `${daysLeft} days to fight`
+    : 'Fight week — stay sharp, stay fresh';
+
+  const campMs  = addDays(CAMP_START, 42) - CAMP_START;
+  const elapsed = Math.min(todayNow - CAMP_START, campMs);
+  const pct     = Math.round(Math.max(0, elapsed / campMs * 100));
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent  = pct + '%';
+
+  save();
+}
+
+function openModal(key, si, isNew, dateObj) {
+  modalCtx = { key, si, isNew };
+  const d    = dateObj || new Date();
+  const sess = isNew
+    ? { type:'mt-type', name:'', time:'', note:'' }
+    : state[key].sessions[si];
+
+  document.getElementById('modal-title').textContent = isNew ? 'Add Session' : 'Edit Session';
+  document.getElementById('modal-date').textContent  = `${DAY_NAMES[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
+  document.getElementById('m-type').value  = sess.type;
+  document.getElementById('m-time').value  = sess.time  || '';
+  document.getElementById('m-notes').value = sess.note  || '';
+  document.getElementById('del-btn').style.display = isNew ? 'none' : '';
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  modalCtx = null;
+}
+
+function saveModal() {
+  if (!modalCtx) return;
+  const { key, si, isNew } = modalCtx;
+  const type = document.getElementById('m-type').value;
+  const time = document.getElementById('m-time').value.trim();
+  const note = document.getElementById('m-notes').value.trim();
+  const sess = { type, name: NAME_MAP[type], time, note };
+
+  if (!state[key]) state[key] = { sessions: [], done: {} };
+  if (isNew) state[key].sessions.push(sess);
+  else state[key].sessions[si] = sess;
+
+  closeModal(); render();
+}
+
+function deleteSession() {
+  if (!modalCtx) return;
+  const { key, si } = modalCtx;
+  if (state[key]?.sessions) {
+    state[key].sessions.splice(si, 1);
+    const nd = {};
+    Object.keys(state[key].done || {}).forEach(k => {
+      const ki = parseInt(k);
+      if      (ki < si) nd[ki]   = state[key].done[k];
+      else if (ki > si) nd[ki-1] = state[key].done[k];
+    });
+    state[key].done = nd;
+  }
+  closeModal(); render();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.main-tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('view-calendar').style.display  = tab === 'calendar'  ? '' : 'none';
+  document.getElementById('view-cardio').style.display    = tab === 'cardio'    ? '' : 'none';
+  document.getElementById('view-nutrition').style.display = tab === 'nutrition' ? '' : 'none';
+  document.getElementById('view-recovery').style.display  = tab === 'recovery'  ? '' : 'none';
+}
+
+function showRec(panel, btn) {
+  ['sleep','postspar','restdays','fatigue','daily'].forEach(p => {
+    document.getElementById('rec-panel-' + p).style.display = 'none';
+  });
+  document.querySelectorAll('#rec-tabs .wtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('rec-panel-' + panel).style.display = '';
+  btn.classList.add('active');
+}
+
+function showNutr(panel, btn) {
+  ['targets','supplements','meals','timing','snacks','shopping'].forEach(p => {
+    document.getElementById('nutr-panel-' + p).style.display = 'none';
+  });
+  document.querySelectorAll('#nutr-tabs .wtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('nutr-panel-' + panel).style.display = '';
+  btn.classList.add('active');
+  if (panel === 'shopping') initShopList();
+}
+
+const SHOP_KEY = 'fightcamp_shop_v1';
+
+function initShopList() {
+  const checked = JSON.parse(localStorage.getItem(SHOP_KEY) || '{}');
+  document.querySelectorAll('.shop-row.chk').forEach(row => {
+    const id = row.dataset.id;
+    if (checked[id]) row.classList.add('checked');
+    row.onclick = () => {
+      row.classList.toggle('checked');
+      const c = JSON.parse(localStorage.getItem(SHOP_KEY) || '{}');
+      c[id] = row.classList.contains('checked');
+      localStorage.setItem(SHOP_KEY, JSON.stringify(c));
+    };
+  });
+}
+
+function clearShopList() {
+  localStorage.removeItem(SHOP_KEY);
+  document.querySelectorAll('.shop-row.chk').forEach(r => r.classList.remove('checked'));
+}
+
+
+const CARDIO_WEEKS = {
+  1: { phase:'Week 1 — Base', phaseColor:'#eff6ff', phaseText:'#2563eb', totalMin:45, totalNote:'4 rounds · build the habit', blocks:[
+    { tag:'warmup', tagLabel:'Warm-up', headline:'10 min easy jog', detail:'~2 laps at a fully conversational pace. This is relaxed — just wake the body up.' },
+    { tag:'main', tagLabel:'Main set', headline:'4 rounds × 3 min hard / 90 sec walk', detail:'Run at a hard but sustainable effort — 75–80% max. You should be breathing hard but able to hold the pace all 3 min. If you blow up in 90 sec, slow down.', rounds:[{t:'3 min hard',c:'r-hard'},{t:'90 sec walk',c:'r-walk'},{t:'× 4 rounds',c:'r-label'}] },
+    { tag:'cool', tagLabel:'Cool-down', headline:'10 min easy walk + stretch', detail:'Calves, hip flexors, quads. Non-negotiable — you fight in 6 weeks.' }
+  ]},
+  2: { phase:'Week 2 — Build', phaseColor:'#eff6ff', phaseText:'#2563eb', totalMin:50, totalNote:'5 rounds · full fight-round set', blocks:[
+    { tag:'warmup', tagLabel:'Warm-up', headline:'10 min easy jog', detail:'2 laps, easy. Same as week 1.' },
+    { tag:'main', tagLabel:'Main set', headline:'5 rounds × 3 min hard / 1 min walk', detail:'One extra round, rest cuts by 30 sec. This is now a proper 5-round fight simulation. Pace yourself — round 5 should feel like rounds 1–2 felt last week.', rounds:[{t:'3 min hard',c:'r-hard'},{t:'1 min walk',c:'r-walk'},{t:'× 5 rounds',c:'r-label'}] },
+    { tag:'finish', tagLabel:'Finisher', headline:'2 × 1 min all-out efforts', detail:'Full effort to a landmark and back. 2 min walk between. End empty.' },
+    { tag:'cool', tagLabel:'Cool-down', headline:'10 min easy walk + stretch', detail:'Same routine as week 1.' }
+  ]},
+  3: { phase:'Week 3 — Intensity', phaseColor:'#fef2f2', phaseText:'#b91c1c', totalMin:55, totalNote:'6 rounds + 2 sprints · push past comfort', blocks:[
+    { tag:'warmup', tagLabel:'Warm-up', headline:'10 min easy jog', detail:'2 laps easy. You know the drill.' },
+    { tag:'main', tagLabel:'Main set', headline:'6 rounds × 3 min hard / 1 min walk', detail:'One extra round from last week. Round 6 is where fight cardio gets built. If it feels fine, you are not going hard enough.', rounds:[{t:'3 min hard',c:'r-hard'},{t:'1 min walk',c:'r-walk'},{t:'× 6 rounds',c:'r-label'}] },
+    { tag:'finish', tagLabel:'Finisher', headline:'2 × 1 min all-out sprints', detail:'Same as week 2 but your legs are more fatigued. That is the point. 2 min walk between each.' },
+    { tag:'cool', tagLabel:'Cool-down', headline:'10 min easy walk + stretch', detail:'Spend extra time on hips — 6 rounds will tighten you up.' }
+  ]},
+  4: { phase:'Week 4 — Peak', phaseColor:'#fef2f2', phaseText:'#b91c1c', totalMin:60, totalNote:'6 rounds + 3 sprints · highest load week', blocks:[
+    { tag:'warmup', tagLabel:'Warm-up', headline:'10 min easy jog', detail:'2 laps. Save the legs for what is coming.' },
+    { tag:'main', tagLabel:'Main set', headline:'6 rounds × 3 min hard / 1 min walk', detail:'Same as week 3 but your base is stronger. Push the pace on rounds 4–6 compared to last week.', rounds:[{t:'3 min hard',c:'r-hard'},{t:'1 min walk',c:'r-walk'},{t:'× 6 rounds',c:'r-label'}] },
+    { tag:'finish', tagLabel:'Finisher', headline:'3 × 1 min all-out sprints', detail:'One extra sprint. 2 min walk between each. This is your peak load — earn it.' },
+    { tag:'cool', tagLabel:'Cool-down', headline:'10 min easy walk + stretch', detail:'Full stretch. You have just done the hardest cardio session of camp.' }
+  ]},
+  5: { phase:'Week 5 — Taper', phaseColor:'#f0fdf4', phaseText:'#15803d', totalMin:45, totalNote:'4 rounds + 1 sprint · maintain sharpness, reduce load', blocks:[
+    { tag:'warmup', tagLabel:'Warm-up', headline:'10 min easy jog', detail:'2 laps, relaxed. The work is mostly done.' },
+    { tag:'main', tagLabel:'Main set', headline:'4 rounds × 3 min hard / 1 min walk', detail:'Back to 4 rounds. Keep the effort honest but do not push beyond 80%. You are banking energy for fight week.', rounds:[{t:'3 min hard',c:'r-hard'},{t:'1 min walk',c:'r-walk'},{t:'× 4 rounds',c:'r-label'}] },
+    { tag:'finish', tagLabel:'Finisher', headline:'1 × 1 min all-out sprint', detail:'Just one. Stay sharp without digging a hole.' },
+    { tag:'cool', tagLabel:'Cool-down', headline:'10 min easy walk + stretch', detail:'Long stretch — hips, hamstrings, calves.' }
+  ]},
+  6: { phase:'Week 6 — Fight Week', phaseColor:'#fffbeb', phaseText:'#d97706', totalMin:0, totalNote:'No cardio session this week', blocks:[
+    { tag:'rest', tagLabel:'Rest', headline:'No Sunday cardio this week', detail:'Your engine is built. Running hard the week of your fight adds fatigue without adding fitness. Stay loose with walks, light shadow boxing, and good sleep. Save everything for fight night.' }
+  ]}
+};
+
+function switchWeek(n, btn) {
+  document.querySelectorAll('.wtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCardioPanel(n);
+}
+
+function renderCardioPanel(n) {
+  const w = CARDIO_WEEKS[n];
+  const panel = document.getElementById('cardio-panel');
+  const roundsHTML = (rounds) => {
+    if (!rounds) return '';
+    return '<div class="cp-rounds">' + rounds.map(r =>
+      r.c === 'r-label' ? `<span class="r-label">${r.t}</span>` : `<span class="r-box ${r.c}">${r.t}</span>`
+    ).join('') + '</div>';
+  };
+  const blocksHTML = w.blocks.map(b => `
+    <div class="cp-block">
+      <div class="cp-tag tag-${b.tag}">${b.tagLabel}</div>
+      <div class="cp-content">
+        <div class="cp-headline">${b.headline}</div>
+        <div class="cp-detail">${b.detail}</div>
+        ${roundsHTML(b.rounds)}
+      </div>
+    </div>`).join('');
+  const totalRow = w.totalMin > 0
+    ? `<div class="cp-total"><span>Total: <strong>~${w.totalMin} min</strong></span><span>${w.totalNote}</span></div>` : '';
+  panel.innerHTML = `<div class="cardio-panel-wrap"><div class="cp-phase-bar" style="background:${w.phaseColor};color:${w.phaseText};">${w.phase}</div>${blocksHTML}${totalRow}</div>`;
+}
+
+render();
+renderCardioPanel(1);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+</script>
+</body>
+</html>

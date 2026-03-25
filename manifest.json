@@ -1,0 +1,18 @@
+{
+  "name": "Fight Camp 2026",
+  "short_name": "Fight Camp",
+  "description": "6-week Muay Thai fight camp tracker",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
