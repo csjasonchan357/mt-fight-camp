@@ -180,6 +180,7 @@ header {
   flex-direction: column;
   gap: 5px;
   transition: box-shadow 0.15s;
+  position: relative;
 }
 
 .day-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
@@ -189,10 +190,17 @@ header {
 
 .day-top {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
   margin-bottom: 3px;
+  gap: 2px;
 }
+
+.day-card { position: relative; }
+
+/* desktop: office tag + today pip sit top-right */
+.day-card .office-tag { position: absolute; top: 8px; right: 8px; }
+.day-card .today-pip  { position: absolute; top: 10px; right: 28px; }
 
 .day-name {
   font-size: 10px;
@@ -296,6 +304,14 @@ header {
 
 .session-pill:hover .pill-edit { display: block; }
 .pill-edit:hover { color: #1a1a1a !important; }
+
+.day-pills-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
 
 .add-btn {
   margin-top: auto;
@@ -598,13 +614,165 @@ header {
 .rec-bullet.rec-warn { color: #92660a; }
 .rec-dot-warn { width: 7px; height: 7px; border-radius: 50%; background: #d97706; flex-shrink: 0; margin-top: 5px; }
 
-@media (max-width: 680px) {
-  header, .calendar, .legend, .progress-wrap, .fight-banner, .main-tabs, #view-cardio, #view-nutrition, #view-recovery { padding-left: 14px; padding-right: 14px; }
-  .days-grid { gap: 4px; }
-  .day-card { padding: 7px 6px; min-height: 95px; }
+@media (max-width: 768px) {
+
+  /* ── Header ── */
+  header {
+    padding: 14px 16px;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .logo { font-size: 16px; }
+  .logo-sub { font-size: 10px; margin-top: 1px; }
+  .header-right { gap: 14px; }
+  .stat-num { font-size: 18px; }
+  .stat-label { font-size: 9px; }
+
+  /* ── Progress + banner ── */
+  .progress-wrap { padding: 8px 16px; }
+  .fight-banner { padding: 7px 16px; font-size: 11px; }
+
+  /* ── Tabs: scrollable single row, no wrap ── */
+  .main-tabs {
+    padding: 0 16px;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .main-tabs::-webkit-scrollbar { display: none; }
+  .main-tab {
+    font-size: 12px;
+    padding: 10px 12px 9px;
+    flex-shrink: 0;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    padding: 8px 16px;
+    gap: 10px;
+  }
   .hint, .leg-div { display: none; }
+  .leg { font-size: 10px; }
+
+  /* ── Calendar: vertical day list instead of 7-col grid ── */
+  .calendar { padding: 16px 16px 60px; }
+  .week-block { margin-bottom: 20px; }
+  .week-header { margin-bottom: 8px; }
+  .week-label { font-size: 14px; }
+  .week-dates { font-size: 10px; }
+
+  .days-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .day-card {
+    min-height: unset;
+    padding: 10px 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+  }
+
+  .day-top {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: 42px;
+    gap: 2px;
+  }
+
+  .day-name { font-size: 9px; text-align: center; }
+  .day-date { font-size: 20px; line-height: 1; text-align: center; }
+
+  .today-pip { margin: 2px auto 0; }
+
+  .office-tag {
+    font-size: 8px;
+    padding: 1px 4px;
+    text-align: center;
+  }
+
+  /* Sessions flow horizontally on mobile */
+  .day-card > .session-pill,
+  .day-card > .add-btn {
+    flex: 1;
+  }
+
+  .day-card {
+    flex-wrap: wrap;
+  }
+
+  /* Pills take up remaining space after the date column */
+  .day-pills-row {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .session-pill {
+    flex: 1;
+    min-width: 80px;
+    padding: 7px 8px;
+  }
+
+  .pill-name { font-size: 11px; }
   .pill-time { display: none; }
+
+  .add-btn {
+    margin-top: 0;
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    font-size: 10px;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  /* ── Sub-tabs (cardio weeks, nutrition, recovery) ── */
+  .week-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+  .week-tabs::-webkit-scrollbar { display: none; }
+  .wtab { flex-shrink: 0; }
+
+  /* ── Cardio / nutrition / recovery views ── */
+  #view-cardio,
+  #view-nutrition,
+  #view-recovery { padding: 16px 16px 60px; }
+
+  .cardio-intro .ci-title { font-size: 17px; }
+
+  /* Nutrition stat grid: 2x2 on mobile */
+  .macro-grid,
+  .day-type-row { grid-template-columns: 1fr 1fr; }
+
+  /* Shopping grid: single column on mobile */
+  #nutr-panel-shopping > div { grid-template-columns: 1fr !important; }
+
+  /* Recovery cards */
+  .rec-card { padding: 12px 14px; }
+  .rec-bullet { font-size: 12px; }
+
+  /* Modal */
+  .modal { margin: 0; border-radius: 20px 20px 0 0; position: fixed; bottom: 0; left: 0; right: 0; max-width: 100%; }
+  .overlay { align-items: flex-end; padding: 0; }
 }
+
 
 </style>
 </head>
@@ -1182,15 +1350,14 @@ function render() {
 
       card.innerHTML = `
         <div class="day-top">
-          <div>
-            <div class="day-name">${DAY_NAMES[dow]}</div>
-            <div class="day-date">${date.getDate()}</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
-            ${isToday ? '<div class="today-pip"></div>' : ''}
-            ${officeDay ? '<div class="office-tag">office</div>' : ''}
-          </div>
+          <div class="day-name">${DAY_NAMES[dow]}</div>
+          <div class="day-date">${date.getDate()}</div>
+          ${isToday ? '<div class="today-pip"></div>' : ''}
+          ${officeDay ? '<div class="office-tag">off</div>' : ''}
         </div>`;
+
+      const pillsRow = document.createElement('div');
+      pillsRow.className = 'day-pills-row';
 
       data.sessions.forEach((sess, si) => {
         const isDone = !!data.done[si];
@@ -1221,14 +1388,16 @@ function render() {
         const editBtn = pill.querySelector('.pill-edit');
         if (editBtn) editBtn.addEventListener('click', (e) => { e.stopPropagation(); openModal(key, si, false, date); });
 
-        card.appendChild(pill);
+        pillsRow.appendChild(pill);
       });
 
       const addBtn = document.createElement('button');
       addBtn.className = 'add-btn';
-      addBtn.textContent = '+ add session';
+      addBtn.textContent = '+ add';
       addBtn.addEventListener('click', () => openModal(key, null, true, date));
-      card.appendChild(addBtn);
+      pillsRow.appendChild(addBtn);
+
+      card.appendChild(pillsRow);
 
       grid.appendChild(card);
     }
